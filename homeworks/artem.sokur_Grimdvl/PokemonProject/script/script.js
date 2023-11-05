@@ -111,6 +111,9 @@ window.addEventListener('DOMContentLoaded', () => {
                                     numbers[3].textContent = num2;
                                     result = calculate(+numbers[0].value, signs[0].value, +num2);
                                     resultOutput.textContent = result;
+                                    // Number.isNaN(result) || result === undefined || result === ''
+                                    // ? resultOutput.textContent = 'Ups! Something went wrong...'
+                                    // : resultOutput.textContent = result;
                                     drawPokemons(num2, '.calculator .output__second');
                                     drawPokemons(result, '.calculator .output__result');
                                 }
@@ -122,6 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                     state[prop] = item.value;
                                     const sign = inputSign.value;
                                     signs[1].textContent = sign;
+                                    signs[2].textContent = sign;
                                     result = calculate(+numbers[0].value, sign, +numbers[1].value);
                                     resultOutput.textContent = result;
                                     drawPokemons(result, '.calculator .output__result');
@@ -153,10 +157,5 @@ window.addEventListener('DOMContentLoaded', () => {
         calculator('change', signs, 'sign');
         calculator('click', buttons, 'button');
     };
-    // const cards = () => {
-    //     new PokemonsCards("img/pokemon.png", "pokemon", ".calculator .output__first").render();
-    //     new PokemonsCards("img/pokemon.png", "pokemon", ".calculator .output__second").render();
-    //     new PokemonsCards("img/pokemon.png", "pokemon", ".calculator .output__result").render();
-    // };
     changeState(stateInputs);
 });
