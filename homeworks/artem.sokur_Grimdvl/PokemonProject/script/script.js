@@ -11,6 +11,40 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    class PokemonsCards {
+        constructor(src, alt, parentSelector, ...classes) {
+            this.src = src;
+            this.alt = alt;
+            this.classes = classes;
+            this.parent = document.querySelector(parentSelector);
+        }
+
+        render() {
+            const element = document.createElement('div');
+            if (this.classes.length === 0) {
+                this.classes = 'output-card';
+                element.classList.add(this.classes);
+            } else {
+                this.classes.forEach((className) => element.classList.add(className));
+            }
+            element.innerHTML = `<img src=${this.src} alt=${this.alt}>`;
+            this.parent.append(element);
+        }
+    }
+    const drawPokemons = (inputValue, containerSelector) => {
+        const cardContainer = document.querySelector(containerSelector);
+        cardContainer.innerHTML = '';
+        const numberOfPokemons = parseInt(inputValue, 10);
+        const isNegative = numberOfPokemons < 0;
+        for (let i = 0; i < Math.abs(numberOfPokemons); i++) {
+            new PokemonsCards(
+                'img/pokemon.png',
+                'pokemon',
+                containerSelector,
+            ).render();
+        }
+        return isNegative ? -numberOfPokemons : numberOfPokemons;
+    };
     let result;
     const calculate = (firstNum, operator, secondNum) => {
         switch (operator) {
@@ -36,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 result = 'Invalid operator';
         }
         if (result > 100) {
-            result = 'Result is too big';
+            result = 'To much';
         } else {
             result = Math.round(result * 100) / 100;
         }
@@ -69,12 +103,16 @@ window.addEventListener('DOMContentLoaded', () => {
                                     numbers[2].textContent = num1;
                                     result = calculate(+num1, signs[0].value, +numbers[1].value);
                                     resultOutput.textContent = result;
+                                    drawPokemons(num1, '.calculator .output__first');
+                                    drawPokemons(result, '.calculator .output__result');
                                 } else if (i === 1) {
                                     state[prop] = item.value;
                                     const num2 = +inputNumber.value;
                                     numbers[3].textContent = num2;
                                     result = calculate(+numbers[0].value, signs[0].value, +num2);
                                     resultOutput.textContent = result;
+                                    drawPokemons(num2, '.calculator .output__second');
+                                    drawPokemons(result, '.calculator .output__result');
                                 }
                             }
                             break;
@@ -86,6 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                     signs[1].textContent = sign;
                                     result = calculate(+numbers[0].value, sign, +numbers[1].value);
                                     resultOutput.textContent = result;
+                                    drawPokemons(result, '.calculator .output__result');
                                 }
                             }
                             break;
@@ -114,5 +153,10 @@ window.addEventListener('DOMContentLoaded', () => {
         calculator('change', signs, 'sign');
         calculator('click', buttons, 'button');
     };
+    // const cards = () => {
+    //     new PokemonsCards("img/pokemon.png", "pokemon", ".calculator .output__first").render();
+    //     new PokemonsCards("img/pokemon.png", "pokemon", ".calculator .output__second").render();
+    //     new PokemonsCards("img/pokemon.png", "pokemon", ".calculator .output__result").render();
+    // };
     changeState(stateInputs);
 });
