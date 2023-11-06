@@ -14,9 +14,10 @@ function calculate(firstValue, secondValue, operation) {
     let result;
 
     if (firstValue.trim() === '') {
-        result = 'Enter the first number';
-    } else if (secondValue.trim() === '') {
-        result = 'Enter the second number';
+        return 'Enter the first number';
+    }
+    if (secondValue.trim() === '') {
+        return 'Enter the second number';
     }
 
     const firstNumber = +firstValue;
@@ -47,9 +48,10 @@ function calculate(firstValue, secondValue, operation) {
     }
 
     if (Number.isNaN(result)) {
-        result = 'Enter a number';
-    } else if (result > 100) {
-        result = 'Result is too big';
+        return 'Enter a number';
+    }
+    if (result > 100) {
+        return 'Result is too big';
     }
     return Math.round(result * 100) / 100;
 }
