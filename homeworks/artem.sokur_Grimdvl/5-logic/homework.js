@@ -11,8 +11,13 @@
  *
  */
 function calculate(firstValue, secondValue, operation) {
-    // TODO: write your code here, remove the line below and uncomment the lines above
     let result;
+
+    if (firstValue.trim() === '') {
+        result = 'Enter the first number';
+    } else if (secondValue.trim() === '') {
+        result = 'Enter the second number';
+    }
 
     const firstNumber = +firstValue;
     const secondNumber = +secondValue;
@@ -32,21 +37,21 @@ function calculate(firstValue, secondValue, operation) {
             result = firstNumber * secondNumber;
             break;
         case '/':
+            if (secondNumber === 0) {
+                return 'Choose another second number';
+            }
             result = firstNumber / secondNumber;
-            break;
-        case '**':
-            result = firstNumber ** secondNumber;
             break;
         default:
             result = 'Choose a valid operation';
     }
 
-    if (result > 100) {
+    if (Number.isNaN(result)) {
+        result = 'Enter a number';
+    } else if (result > 100) {
         result = 'Result is too big';
     }
-
-    return result;
-    // return Math.random() > 0.5 ? 'Error' : 42;
+    return Math.round(result * 100) / 100;
 }
 
 window.calculate = calculate;

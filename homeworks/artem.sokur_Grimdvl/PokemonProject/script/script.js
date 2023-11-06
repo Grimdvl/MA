@@ -1,4 +1,12 @@
 window.addEventListener('DOMContentLoaded', () => {
+    const numbers = document.querySelectorAll('.number');
+    const signs = document.querySelectorAll('.sign');
+    const buttons = document.querySelectorAll('.button');
+    const resultOutput = document.querySelector('.output-result');
+    const resultOutputCards = document.querySelector('.output__result');
+    const resultInput = document.querySelector('.input-result');
+    const equel = document.querySelectorAll('.output-equal');
+
     const stateInputs = {};
 
     // transform value to numbers
@@ -31,6 +39,7 @@ window.addEventListener('DOMContentLoaded', () => {
             this.parent.append(element);
         }
     }
+
     const drawPokemons = (inputValue, containerSelector) => {
         const cardContainer = document.querySelector(containerSelector);
         cardContainer.innerHTML = '';
@@ -43,8 +52,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 containerSelector,
             ).render();
         }
+        if (inputValue > 100) {
+            resultOutputCards.textContent = 'To many pokemons';
+        }
         return isNegative ? -numberOfPokemons : numberOfPokemons;
     };
+
     let result;
     const calculate = (firstNum, operator, secondNum) => {
         switch (operator) {
@@ -70,21 +83,26 @@ window.addEventListener('DOMContentLoaded', () => {
                 result = 'Invalid operator';
         }
         if (result > 100) {
-            result = 'To much';
+            result = 'Too many';
         } else {
             result = Math.round(result * 100) / 100;
         }
-        return `${result} Pokemons`;
+        equel.forEach((item) => {
+            item.textContent = '=';
+        });
+        if (operator === 'sign') {
+            result = 'Invalid operator';
+            equel.forEach((item) => {
+                item.textContent = '';
+            });
+        } else {
+            result = `${result} pokemons`;
+        }
+        return result;
     };
 
     // Calculator
     const changeState = (state) => {
-        const numbers = document.querySelectorAll('.number');
-        const signs = document.querySelectorAll('.sign');
-        const buttons = document.querySelectorAll('.button');
-        const resultOutput = document.querySelector('.output-result');
-        const resultInput = document.querySelector('.input-result');
-
         const calculator = (event, elem, prop) => {
             checkNumInputs('#first-number');
             checkNumInputs('#second-number');
@@ -101,21 +119,34 @@ window.addEventListener('DOMContentLoaded', () => {
                                     state[prop] = item.value;
                                     const num1 = +inputNumber.value;
                                     numbers[2].textContent = num1;
-                                    result = calculate(+num1, signs[0].value, +numbers[1].value);
-                                    resultOutput.textContent = result;
                                     drawPokemons(num1, '.calculator .output__first');
-                                    drawPokemons(result, '.calculator .output__result');
+                                    if (num1 === '' || numbers[1].value === '') {
+                                        resultOutput.textContent = 'Please enter all numbers';
+                                    } else {
+                                        result = calculate(
+                                            +num1,
+                                            signs[0].value,
+                                            +numbers[1].value,
+                                        );
+                                        resultOutput.textContent = result;
+                                        drawPokemons(result, '.calculator .output__result');
+                                    }
                                 } else if (i === 1) {
                                     state[prop] = item.value;
                                     const num2 = +inputNumber.value;
                                     numbers[3].textContent = num2;
-                                    result = calculate(+numbers[0].value, signs[0].value, +num2);
-                                    resultOutput.textContent = result;
-                                    // Number.isNaN(result) || result === undefined || result === ''
-                                    // ? resultOutput.textContent = 'Ups! Something went wrong...'
-                                    // : resultOutput.textContent = result;
                                     drawPokemons(num2, '.calculator .output__second');
-                                    drawPokemons(result, '.calculator .output__result');
+                                    if (numbers[0].value === '' || num2 === '') {
+                                        resultOutput.textContent = 'Please enter all numbers';
+                                    } else {
+                                        result = calculate(
+                                            +numbers[0].value,
+                                            signs[0].value,
+                                            +num2,
+                                        );
+                                        resultOutput.textContent = result;
+                                        drawPokemons(result, '.calculator .output__result');
+                                    }
                                 }
                             }
                             break;
@@ -126,9 +157,17 @@ window.addEventListener('DOMContentLoaded', () => {
                                     const sign = inputSign.value;
                                     signs[1].textContent = sign;
                                     signs[2].textContent = sign;
-                                    result = calculate(+numbers[0].value, sign, +numbers[1].value);
-                                    resultOutput.textContent = result;
-                                    drawPokemons(result, '.calculator .output__result');
+                                    if (numbers[0].value === '' || numbers[1].value === '') {
+                                        resultOutput.textContent = 'Please enter all numbers';
+                                    } else {
+                                        result = calculate(
+                                            +numbers[0].value,
+                                            sign,
+                                            +numbers[1].value,
+                                        );
+                                        resultOutput.textContent = result;
+                                        drawPokemons(result, '.calculator .output__result');
+                                    }
                                 }
                             }
                             break;
@@ -153,7 +192,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
             return result;
         };
-        calculator('input', numbers, 'numbers');
+        calculator('input', numbers, 'number');
         calculator('change', signs, 'sign');
         calculator('click', buttons, 'button');
     };
