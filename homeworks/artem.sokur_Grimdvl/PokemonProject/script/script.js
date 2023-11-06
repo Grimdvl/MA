@@ -1,20 +1,52 @@
 window.addEventListener('DOMContentLoaded', () => {
-    let stateInputs = {};
+    const stateInputs = {};
 
     // transform value to numbers
     const checkNumInputs = (selector) => {
         const numInputs = document.querySelectorAll(selector);
-        
-        numInputs.forEach(item => {
+        numInputs.forEach((item) => {
             item.addEventListener('input', () => {
                 item.value = item.value.replace(/[^0-9.]/g, '');
             });
         });
     };
 
-    const calculate = (firstNum, operator, secondNum) => {
-        let result;
+    class PokemonsCards {
+        constructor(src, alt, parentSelector, ...classes) {
+            this.src = src;
+            this.alt = alt;
+            this.classes = classes;
+            this.parent = document.querySelector(parentSelector);
+        }
 
+        render() {
+            const element = document.createElement('div');
+            if (this.classes.length === 0) {
+                this.classes = 'output-card';
+                element.classList.add(this.classes);
+            } else {
+                this.classes.forEach((className) => element.classList.add(className));
+            }
+            element.innerHTML = `<img src=${this.src} alt=${this.alt}>`;
+            this.parent.append(element);
+        }
+    }
+    const drawPokemons = (inputValue, containerSelector) => {
+        const cardContainer = document.querySelector(containerSelector);
+        cardContainer.innerHTML = '';
+        const numberOfPokemons = parseInt(inputValue, 10);
+        const isNegative = numberOfPokemons < 0;
+        for (let i = 0; i < Math.abs(numberOfPokemons); i++) {
+            new PokemonsCards(
+                'img/pokemon.png',
+                'pokemon',
+                containerSelector,
+            ).render();
+        }
+        return isNegative ? -numberOfPokemons : numberOfPokemons;
+    };
+    let result;
+    const calculate = (firstNum, operator, secondNum) => {
         switch (operator) {
             case '+':
                 result = firstNum + secondNum;
@@ -37,7 +69,12 @@ window.addEventListener('DOMContentLoaded', () => {
             default:
                 result = 'Invalid operator';
         }
-        return result;
+        if (result > 100) {
+            result = 'To much';
+        } else {
+            result = Math.round(result * 100) / 100;
+        }
+        return `${result} Pokemons`;
     };
 
     // Calculator
@@ -54,43 +91,56 @@ window.addEventListener('DOMContentLoaded', () => {
 
             elem.forEach((item, i) => {
                 item.addEventListener(event, () => {
+                    const inputNumber = numbers[i];
+                    const inputSign = signs[i];
+                    const buttonOutput = buttons[i];
                     switch (item.nodeName) {
                         case 'INPUT':
-                            const inputNumber = numbers[i];
                             if (inputNumber) {
                                 if (i === 0) {
                                     state[prop] = item.value;
                                     const num1 = +inputNumber.value;
                                     numbers[2].textContent = num1;
-                                    result = calculate(+num1, signs[0].value, +numbers[1].value)
+                                    result = calculate(+num1, signs[0].value, +numbers[1].value);
                                     resultOutput.textContent = result;
+                                    drawPokemons(num1, '.calculator .output__first');
+                                    drawPokemons(result, '.calculator .output__result');
                                 } else if (i === 1) {
                                     state[prop] = item.value;
                                     const num2 = +inputNumber.value;
                                     numbers[3].textContent = num2;
-                                    result = calculate(+numbers[0].value, signs[0].value, +num2)
+                                    result = calculate(+numbers[0].value, signs[0].value, +num2);
                                     resultOutput.textContent = result;
+                                    // Number.isNaN(result) || result === undefined || result === ''
+                                    // ? resultOutput.textContent = 'Ups! Something went wrong...'
+                                    // : resultOutput.textContent = result;
+                                    drawPokemons(num2, '.calculator .output__second');
+                                    drawPokemons(result, '.calculator .output__result');
                                 }
                             }
                             break;
                         case 'SELECT':
-                            const inputSign = signs[i];
                             if (inputSign) {
                                 if (i === 0) {
                                     state[prop] = item.value;
                                     const sign = inputSign.value;
                                     signs[1].textContent = sign;
-                                    result = calculate(+numbers[0].value, sign, +numbers[1].value)
+                                    signs[2].textContent = sign;
+                                    result = calculate(+numbers[0].value, sign, +numbers[1].value);
                                     resultOutput.textContent = result;
+                                    drawPokemons(result, '.calculator .output__result');
                                 }
                             }
                             break;
                         case 'BUTTON':
-                            const buttonOutput = buttons[i];
                             if (buttonOutput) {
                                 if (i === 0) {
                                     state[prop] = item.textContent;
-                                    result = calculate(+numbers[0].value, signs[0].value, +numbers[1].value)
+                                    result = calculate(
+                                        +numbers[0].value,
+                                        signs[0].value,
+                                        +numbers[1].value,
+                                    );
                                     resultInput.textContent = result;
                                 }
                             }
