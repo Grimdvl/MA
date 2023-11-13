@@ -72,8 +72,6 @@ function validateForm() {
     if (!getValueById(NOT_A_ROBOT_CHECKBOX_ID)) {
         errors.checkbox.hasError = true;
     }
-
-    console.log(errors);
     setErrors(errors);
 
     if (!Object.values(errors).some((error) => error.hasError)) {
