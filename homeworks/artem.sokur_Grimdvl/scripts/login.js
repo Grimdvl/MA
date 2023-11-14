@@ -48,13 +48,11 @@ function navigateToResultPage() {
 }
 
 function isEmail(email) {
-    const emailInput = document.getElementById(email).value;
-    return /\S+@\S+\.\S+/.test(emailInput);
+    return /\S+@\S+\.\S+/.test(email);
 }
 
 function passwordLength(password) {
-    const passwordInput = document.getElementById(password).value;
-    return passwordInput.length >= 8 && passwordInput.length <= 12;
+    return password.length >= 8 && password.length <= 12;
 }
 
 function validateForm() {
@@ -63,17 +61,16 @@ function validateForm() {
         errors[key].hasError = false;
     });
 
-    if (!isEmail(EMAIL_INPUT_ID)) {
+    if (!isEmail(getValueById(EMAIL_INPUT_ID))) {
         errors.email.hasError = true;
     }
-    if (!passwordLength(PASSWORD_INPUT_ID)) {
+    if (!passwordLength(getValueById(PASSWORD_INPUT_ID))) {
         errors.password.hasError = true;
     }
     if (!getValueById(NOT_A_ROBOT_CHECKBOX_ID)) {
         errors.checkbox.hasError = true;
     }
 
-    console.log(errors);
     setErrors(errors);
 
     if (!Object.values(errors).some((error) => error.hasError)) {
