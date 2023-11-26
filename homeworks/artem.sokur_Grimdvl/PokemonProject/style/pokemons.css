@@ -231,14 +231,14 @@
 /* section pokemons */
 
 .pokemons__title {
-  padding-top: 45px;
+  padding-top: 40px;
 }
 
 .pokemons__cards {
   margin: 10px 0;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 270px);
+  grid-template-columns: repeat(auto-fit, 260px);
   gap: 10px;
   justify-content: space-around;
 }
@@ -254,9 +254,11 @@
 }
 
 .card__pokemon-img {
+  height: 90px;
+  width: 90px;
   background-color: #FDB714;
   border-radius: 20px;
-  margin: 15px;
+  margin: 10px;
 }
 
 .card__pokemon-name {
@@ -266,10 +268,13 @@
 }
 
 .card__characteristics {
-  margin: 15px;
+  margin: 10px;
 }
 
 .card__characteristics-type, .card__characteristics-weaknesses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
   margin-top: 10px;
 }
 
@@ -298,7 +303,7 @@
 
 .card__characteristics-weaknesses span {
   display: inline-block;
-  width: 69px;
+  min-width: 69px;
   color: #FFF;
   background-color: #FF87F3;
   text-align: center;
