@@ -92,7 +92,7 @@
   border: none;
   cursor: pointer;
   transition: .5s;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .login__form--submit:hover {

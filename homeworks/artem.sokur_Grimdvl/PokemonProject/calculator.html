@@ -32,12 +32,12 @@
                 <div class="calculator__inputs">
                     <div class="calculator__inputs-number">
                         <label for="first-number">Number 1</label>
-                        <input class="number" id="first-number" type="text" maxlength="4">
+                        <input class="number" data-type="number" id="first-number" type="text" maxlength="4">
                     </div>
 
                     <div class="calculator__inputs-sign">
                         <label for="sign">Math</label>
-                        <select class="sign" name="sign" id="sign">
+                        <select class="sign" data-type="sign" name="sign" id="sign">
                             <option value="sign" selected hidden>sign</option>
                             <option value="+">+</option>
                             <option value="-">-</option>
@@ -50,7 +50,7 @@
 
                     <div class="calculator__inputs-number">
                         <label for="second-number">Number 2</label>
-                        <input class="number" id="second-number" type="text" maxlength="4">
+                        <input class="number" data-type="number" id="second-number" type="text" maxlength="4">
                     </div>
 
                     <div class="calculator__inputs--button">
@@ -59,24 +59,24 @@
                     </div>
                     <div class="calculator__inputs-result">
                         <span class="equal">Result</span>
-                        <div class="input-result" id="result"></div>
+                        <div class="input-result" data-type="result" id="result"></div>
                     </div>
                 </div>
 
                 <div class="calculator__outputs">
                     <h1 class="calculator__outputs-numbers">
-                        <div class="number"></div>
-                        <div class="sign"></div>
-                        <div class="number"></div>
+                        <div class="number" data-type="number"></div>
+                        <div class="sign" data-type="sign"></div>
+                        <div class="number" data-type="number"></div>
                         <div class="output-equal"></div>
-                        <div class="output-result"></div>
+                        <div class="output-result" data-type="result"></div>
                     </h1>
 
                     <div class="calculator__outputs-cards">
                         <div class="output__first">
                             <!-- <img class="output__first-card" src="img/pokemon.png" alt="pokemon"> -->
                         </div>
-                        <div class="signs"></div>
+                        <div class="signs" data-type="sign"></div>
                         <div class="output__second">
                             <!-- <img src="img/pokemon.png" alt="pokemon"> -->
                         </div>

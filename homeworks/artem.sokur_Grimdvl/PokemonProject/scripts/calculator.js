@@ -8,6 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const stateInputs = {};
 
+    // transform value to numbers
     const checkNumInputs = (selector) => {
         const numInputs = document.querySelectorAll(selector);
         numInputs.forEach((item) => {
@@ -16,6 +17,45 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
     };
+
+    // class PokemonsCards {
+    //     constructor(src, alt, parentSelector, ...classes) {
+    //         this.src = src;
+    //         this.alt = alt;
+    //         this.classes = classes;
+    //         this.parent = document.querySelector(parentSelector);
+    //     }
+
+    //     render() {
+    //         const element = document.createElement('div');
+    //         if (this.classes.length === 0) {
+    //             this.classes = 'output-card';
+    //             element.classList.add(this.classes);
+    //         } else {
+    //             this.classes.forEach((className) => element.classList.add(className));
+    //         }
+    //         element.innerHTML = `<img src=${this.src} alt=${this.alt}>`;
+    //         this.parent.append(element);
+    //     }
+    // }
+
+    // const drawPokemons = (inputValue, containerSelector) => {
+    //     const cardContainer = document.querySelector(containerSelector);
+    //     cardContainer.innerHTML = '';
+    //     const numberOfPokemons = parseInt(inputValue, 10);
+    //     const isNegative = numberOfPokemons < 0;
+    //     for (let i = 0; i < Math.abs(numberOfPokemons); i++) {
+    //         new PokemonsCards(
+    //             'img/pokemon.png',
+    //             'pokemon',
+    //             containerSelector,
+    //         ).render();
+    //     }
+    //     if (inputValue > 100) {
+    //         resultOutputCards.textContent = 'To many pokemons';
+    //     }
+    //     return isNegative ? -numberOfPokemons : numberOfPokemons;
+    // };
 
     let result;
     const calculate = (firstNum, operator, secondNum) => {
@@ -63,6 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return result;
     };
 
+    // Calculator
     const changeState = (state) => {
         const calculator = (event, elem, prop) => {
             checkNumInputs('#first-number');
@@ -98,11 +139,13 @@ window.addEventListener('DOMContentLoaded', () => {
                                         signs[0].value,
                                         +numbers[1].value,
                                     );
+                                    // drawPokemons(result, '.calculator .output__result');
                                     resultOutput.textContent = result;
                                 } else if (i === 1) {
                                     state[prop] = item.value;
                                     const num2 = +inputNumber.value;
                                     numbers[3].textContent = num2;
+                                    // drawPokemons(num2, '.calculator .output__second');
                                     if (numbers[0].value.trim() === '') {
                                         numbers[2].textContent = '';
                                         resultOutput.textContent = 'Please enter the first numbers';
@@ -121,6 +164,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                         +num2,
                                     );
                                     resultOutput.textContent = result;
+                                    // drawPokemons(result, '.calculator .output__result');
                                 }
                             }
                             break;
@@ -130,6 +174,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                     state[prop] = item.value;
                                     const sign = inputSign.value;
                                     signs[1].textContent = sign;
+                                    // signs[2].textContent = sign;
                                     if (numbers[0].value.trim() === '') {
                                         numbers[2].textContent = '';
                                         resultOutput.textContent = 'Please enter the first numbers';
@@ -148,6 +193,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                         +numbers[1].value,
                                     );
                                     resultOutput.textContent = result;
+                                    // drawPokemons(result, '.calculator .output__result');
                                 }
                             }
                             break;
