@@ -69,7 +69,6 @@
 
 .filters__form-choice {
   display: flex;
-  justify-content: space-around;
 }
 
 .filters__form-choice {
@@ -88,6 +87,7 @@
   border: 1px solid #FFF;
   border-radius: 20px;
   outline: none;
+  margin-left: 10px;
 }
 
 .filters__form-choice input[type="radio"]::after {
@@ -111,11 +111,11 @@
   font-weight: 400;
   line-height: 21px;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .filters__form-size {
   display: flex;
-  justify-content: space-around;
   width: 150px;
 }
 
@@ -134,6 +134,7 @@
   border: 1px solid #FFF;
   border-radius: 6px;
   outline: none;
+  margin-left: 10px;
 }
 
 .filters__form-size input[type="checkbox"]::after {
@@ -158,6 +159,7 @@
   font-weight: 400;
   line-height: 21px;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .filters__search {
