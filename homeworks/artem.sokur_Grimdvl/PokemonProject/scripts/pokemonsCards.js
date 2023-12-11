@@ -6,6 +6,9 @@ const smallCheckbox = document.getElementById('small');
 const applyButton = document.querySelector('.filters__search--button');
 const searchInput = document.getElementById('search');
 const selectElement = document.getElementById('type');
+const spinner = document.querySelector('.loading'); // Получаем элемент спиннера по его id
+
+spinner.style.display = 'inline-block';
 
 // let filteredPokemons = [...pokemons];
 let allPokemons = [];
@@ -126,28 +129,50 @@ function filterPokemons() {
     applySearchFilter();
 }
 
+function sortPokemonsByHeight(order, pokemonList) {
+    const sortedPokemons = [...pokemonList];
+    if (order === 'HighFirst') {
+        sortedPokemons.sort((a, b) => b.height - a.height);
+    } else {
+        sortedPokemons.sort((a, b) => a.height - b.height);
+    }
+    renderCards(container, sortedPokemons);
+}
+
+let currentSortType = null;
+
 function applyAllFilters() {
-    filterPokemons();
+    if (currentSortType) {
+        filterPokemons();
 
-    const selectedType = selectElement.value.toLowerCase();
-    const searchValue = searchInput.value.toLowerCase().trim();
+        const selectedType = selectElement.value.toLowerCase();
+        const searchValue = searchInput.value.toLowerCase().trim();
 
-    const filteredByType = filteredPokemons.filter((pokemon) => selectedType === 'type' || pokemon.type.includes(selectedType));
+        const filteredByType = filteredPokemons.filter((pokemon) => selectedType === 'type' || pokemon.type.includes(selectedType));
 
-    const filteredBySearch = filteredByType.filter((pokemon) => {
-        const pokemonName = pokemon.name.toLowerCase();
-        // const pokemonDescription = pokemon.description.toLowerCase();
-        return pokemonName.includes(searchValue);
-        // || pokemonDescription.includes(searchValue)
-    });
+        const filteredBySearch = filteredByType.filter((pokemon) => {
+            const pokemonName = pokemon.name.toLowerCase();
+            return pokemonName.includes(searchValue);
+        });
 
-    renderCards(container, filteredBySearch);
+        sortPokemonsByHeight(currentSortType, filteredBySearch);
+    }
 }
 
 function filterByType(event) {
     const selectedType = event.target.value.toLowerCase();
     renderCardsByType(container, filteredPokemons, selectedType);
 }
+
+document.getElementById('highFirst').addEventListener('change', () => {
+    currentSortType = 'HighFirst';
+    applyAllFilters();
+});
+
+document.getElementById('lowFirst').addEventListener('change', () => {
+    currentSortType = 'LowFirst';
+    applyAllFilters();
+});
 
 selectElement.addEventListener('change', filterByType);
 applyButton.addEventListener('click', applyAllFilters);
@@ -168,7 +193,10 @@ fetch('https://my-json-server.typicode.com/electrovladyslav/pokemon-json-server/
 
         renderCards(container, filteredPokemons);
         applyAllFilters();
+
+        spinner.style.display = 'none';
     })
     .catch((error) => {
         console.error('There was a problem fetching data:', error);
+        spinner.style.display = 'none';
     });
