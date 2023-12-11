@@ -1,4 +1,4 @@
-import pokemons from './pokemonsArray.js';
+// import pokemons from './pokemonsArray.js';
 
 const container = '.pokemons__cards';
 const bigCheckbox = document.getElementById('big');
@@ -7,7 +7,9 @@ const applyButton = document.querySelector('.filters__search--button');
 const searchInput = document.getElementById('search');
 const selectElement = document.getElementById('type');
 
-let filteredPokemons = [...pokemons];
+// let filteredPokemons = [...pokemons];
+let allPokemons = [];
+let filteredPokemons = [];
 
 function createPokemonCard(pokemon) {
     const {
@@ -20,10 +22,11 @@ function createPokemonCard(pokemon) {
         number,
         type,
         weakness,
-        description,
+        // description,
     } = pokemon;
 
-    const slicer = description.length > 100 ? `${description.slice(0, 100)}...` : description;
+    // const slicer = description.length > 100 ? `${description.slice(0, 100)}...` : description;
+    // <span>${slicer}</span>
 
     const rendering = `
         <div class="pokemons__cards-item">
@@ -31,14 +34,13 @@ function createPokemonCard(pokemon) {
                 <img class="card__pokemon-img" src="${ThumbnailImage}" alt="${ThumbnailAltText}">
                 <h3 class="card__pokemon-name">
                     <strong>${name}</strong>
-                    <span>${slicer}</span>
                 </h3>
             </div>
 
             <div class="card__characteristics">
                 <div class="card__characteristics-abilities">
                     <strong>Abilities:</strong>
-                    <span>${abilities}"</span>
+                    <span>${abilities}</span>
                 </div>
                 <div class="card__characteristics-height">
                     <strong>Height:</strong>
@@ -96,8 +98,9 @@ function applySearchFilter() {
 
     const searchFilteredPokemons = filteredPokemons.filter((pokemon) => {
         const pokemonName = pokemon.name.toLowerCase();
-        const pokemonDescription = pokemon.description.toLowerCase();
-        return pokemonName.includes(searchValue) || pokemonDescription.includes(searchValue);
+        // const pokemonDescription = pokemon.description.toLowerCase();
+        return pokemonName.includes(searchValue);
+        // || pokemonDescription.includes(searchValue)
     });
 
     renderCardsByType(container, searchFilteredPokemons, selectElement.value.toLowerCase());
@@ -107,7 +110,7 @@ function filterPokemons() {
     const isBigChecked = bigCheckbox.checked;
     const isSmallChecked = smallCheckbox.checked;
 
-    filteredPokemons = pokemons.filter((pokemon) => {
+    filteredPokemons = allPokemons.filter((pokemon) => {
         if (isBigChecked && isSmallChecked) {
             return pokemon.height > 100 || pokemon.height < 50;
         }
@@ -133,8 +136,9 @@ function applyAllFilters() {
 
     const filteredBySearch = filteredByType.filter((pokemon) => {
         const pokemonName = pokemon.name.toLowerCase();
-        const pokemonDescription = pokemon.description.toLowerCase();
-        return pokemonName.includes(searchValue) || pokemonDescription.includes(searchValue);
+        // const pokemonDescription = pokemon.description.toLowerCase();
+        return pokemonName.includes(searchValue);
+        // || pokemonDescription.includes(searchValue)
     });
 
     renderCards(container, filteredBySearch);
@@ -151,5 +155,20 @@ bigCheckbox.addEventListener('change', applyAllFilters);
 smallCheckbox.addEventListener('change', applyAllFilters);
 searchInput.addEventListener('input', applyAllFilters);
 
-renderCards(container, pokemons);
-applyAllFilters();
+fetch('https://my-json-server.typicode.com/electrovladyslav/pokemon-json-server/pokemons')
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        allPokemons = data;
+        filteredPokemons = [...allPokemons];
+
+        renderCards(container, filteredPokemons);
+        applyAllFilters();
+    })
+    .catch((error) => {
+        console.error('There was a problem fetching data:', error);
+    });
