@@ -6,7 +6,7 @@ const smallCheckbox = document.getElementById('small');
 const applyButton = document.querySelector('.filters__search--button');
 const searchInput = document.getElementById('search');
 const selectElement = document.getElementById('type');
-const spinner = document.querySelector('.loading'); // Получаем элемент спиннера по его id
+const spinner = document.querySelector('.loading');
 
 spinner.style.display = 'inline-block';
 
@@ -200,3 +200,9 @@ fetch('https://my-json-server.typicode.com/electrovladyslav/pokemon-json-server/
         console.error('There was a problem fetching data:', error);
         spinner.style.display = 'none';
     });
+
+const formSelect = document.querySelector('.filters__form-select select');
+
+formSelect.addEventListener('click', () => {
+    formSelect.parentNode.classList.toggle('active');
+});
