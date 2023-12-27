@@ -49,29 +49,11 @@
   cursor: pointer;
   position: relative;
   border: none;
+  transition: .5s;
 }
 
 .calculator__inputs--button button:hover {
-  background-color: #FF6C58;
-  transition: .5s;
-}
-
-.calculator__inputs--button button::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  width: 140%;
-  height: 155%;
-  background: #FF6C58;
-  border-radius: 6px;
-  filter: blur(5px);
-  transition: .5s;
-  opacity: 0;
-}
-
-.calculator__inputs--button button:hover::before {
-  opacity: .3;
+  box-shadow: 0 0 1rem #EF4934;
 }
 
 .calculator__inputs-result div {
