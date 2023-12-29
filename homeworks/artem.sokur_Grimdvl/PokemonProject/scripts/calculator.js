@@ -21,23 +21,6 @@ const checkNumInputs = (selector) => {
     });
 };
 
-// const checkEmptyInputs = (selector) => {
-//     selector.forEach((item) => {
-//         if (item.value.trim() === '') {
-//             numbers[2].textContent = '';
-//             resultOutput.textContent = 'Please enter the first number';
-//             const errorMessage = resultOutput.textContent;
-//             return errorMessage;
-//         }
-//         if (item.value.trim() === '') {
-//             numbers[2].textContent = '';
-//             resultOutput.textContent = 'Please enter the second number';
-//             const errorMessage = resultOutput.textContent;
-//             return errorMessage;
-//         }
-//     });
-// };
-
 // class PokemonsCards {
 //     constructor(src, alt, parentSelector, ...classes) {
 //         this.src = src;
@@ -79,11 +62,16 @@ const checkNumInputs = (selector) => {
 
 let result;
 const calculate = (firstNum, operator, secondNum) => {
-    if (!firstNum || !secondNum || !operator) {
+    if (!firstNum || !secondNum) {
         outputs.forEach((item) => {
             item.textContent = '';
         });
         result = 'Enter all numbers';
+    } else if (!operator) {
+        outputs.forEach((item) => {
+            item.textContent = '';
+        });
+        result = 'Invalid operator';
     } else {
         const num1 = Number(firstNum);
         const num2 = Number(secondNum);
@@ -123,12 +111,7 @@ const calculate = (firstNum, operator, secondNum) => {
         equel.forEach((item) => {
             item.textContent = '=';
         });
-        if (operator === 'sign') {
-            result = 'Invalid operator';
-            equel.forEach((item) => {
-                item.textContent = '';
-            });
-        } else if (result <= 1 && result >= -1) {
+        if (result <= 1 && result >= -1) {
             result = `${result} pokemon`;
         } else {
             result = `${result} pokemons`;
