@@ -1,21 +1,42 @@
-const numbers = document.querySelectorAll('.number');
-const signs = document.querySelectorAll('.sign');
-const buttons = document.querySelectorAll('.button');
+const firstInputNumber = document.querySelectorAll('.number__first--input');
+const firstOutputNumber = document.querySelector('.number__first--output');
+const secondInputNumber = document.querySelectorAll('.number__second--input');
+const secondOutputNumber = document.querySelector('.number__second--output');
+const signSelect = document.querySelectorAll('.math__sign--select');
+const signOutput = document.querySelector('.math__sign--output');
+const outputs = document.querySelectorAll('.calculator__outputs-numbers div');
+const equelButton = document.querySelectorAll('.equel--button');
+const resultInput = document.querySelector('.result--input');
 const resultOutput = document.querySelector('.output-result');
-const resultInput = document.querySelector('.input-result');
 const equel = document.querySelectorAll('.output-equal');
 
 const stateInputs = {};
 
 // transform value to numbers
 const checkNumInputs = (selector) => {
-    const numInputs = document.querySelectorAll(selector);
-    numInputs.forEach((item) => {
+    selector.forEach((item) => {
         item.addEventListener('input', () => {
             item.value = item.value.replace(/[^0-9.]/g, '');
         });
     });
 };
+
+// const checkEmptyInputs = (selector) => {
+//     selector.forEach((item) => {
+//         if (item.value.trim() === '') {
+//             numbers[2].textContent = '';
+//             resultOutput.textContent = 'Please enter the first number';
+//             const errorMessage = resultOutput.textContent;
+//             return errorMessage;
+//         }
+//         if (item.value.trim() === '') {
+//             numbers[2].textContent = '';
+//             resultOutput.textContent = 'Please enter the second number';
+//             const errorMessage = resultOutput.textContent;
+//             return errorMessage;
+//         }
+//     });
+// };
 
 // class PokemonsCards {
 //     constructor(src, alt, parentSelector, ...classes) {
@@ -58,165 +79,100 @@ const checkNumInputs = (selector) => {
 
 let result;
 const calculate = (firstNum, operator, secondNum) => {
-    switch (operator) {
-        case '+':
-            result = firstNum + secondNum;
-            break;
-        case '-':
-            result = firstNum - secondNum;
-            break;
-        case '*':
-            result = firstNum * secondNum;
-            break;
-        case '/':
-            if (secondNum === 0) {
-                return 'Choose another second number';
-            }
-            result = firstNum / secondNum;
-            break;
-        case '%':
-            result = firstNum % secondNum;
-            break;
-        case '**':
-            result = firstNum ** secondNum;
-            break;
-        default:
-            result = 'Invalid operator';
-    }
-    if (result > 100) {
-        result = 'Too many';
-    } else {
-        result = Math.round(result * 100) / 100;
-    }
-    equel.forEach((item) => {
-        item.textContent = '=';
-    });
-    if (operator === 'sign') {
-        result = 'Invalid operator';
-        equel.forEach((item) => {
+    if (!firstNum || !secondNum || !operator) {
+        outputs.forEach((item) => {
             item.textContent = '';
         });
+        result = 'Enter all numbers';
     } else {
-        result = `${result} pokemons`;
+        const num1 = Number(firstNum);
+        const num2 = Number(secondNum);
+        firstOutputNumber.textContent = num1;
+        secondOutputNumber.textContent = num2;
+        signOutput.textContent = operator;
+        switch (operator) {
+            case '+':
+                result = num1 + num2;
+                break;
+            case '-':
+                result = num1 - num2;
+                break;
+            case '*':
+                result = num1 * num2;
+                break;
+            case '/':
+                if (secondNum === 0) {
+                    return 'Сant divide by zero';
+                }
+                result = num1 / num2;
+                break;
+            case '%':
+                result = num1 % num2;
+                break;
+            case '**':
+                result = num1 ** num2;
+                break;
+            default:
+                result = 'Invalid operator';
+        }
+        if (result > 100) {
+            result = 'Too many';
+        } else {
+            result = Math.round(result * 100) / 100;
+        }
+        equel.forEach((item) => {
+            item.textContent = '=';
+        });
+        if (operator === 'sign') {
+            result = 'Invalid operator';
+            equel.forEach((item) => {
+                item.textContent = '';
+            });
+        } else if (result <= 1 && result >= -1) {
+            result = `${result} pokemon`;
+        } else {
+            result = `${result} pokemons`;
+        }
     }
+    resultOutput.textContent = result;
     return result;
 };
 
 // Calculator
 const changeState = (state) => {
     const calculator = (event, elem, prop) => {
-        checkNumInputs('#first-number');
-        checkNumInputs('#second-number');
+        checkNumInputs(firstInputNumber);
+        checkNumInputs(secondInputNumber);
 
-        elem.forEach((item, i) => {
+        elem.forEach((item) => {
             item.addEventListener(event, () => {
-                const inputNumber = numbers[i];
-                const inputSign = signs[i];
-                const buttonOutput = buttons[i];
+                const items = item.value;
                 switch (item.nodeName) {
                     case 'INPUT':
-                        if (inputNumber) {
-                            if (i === 0) {
-                                state[prop] = item.value;
-                                const num1 = +inputNumber.value;
-                                numbers[2].textContent = num1;
-                                // drawPokemons(num1, '.calculator .output__first');
-                                if (numbers[0].value.trim() === '') {
-                                    numbers[2].textContent = '';
-                                    resultOutput.textContent = 'Please enter the first numbers';
-                                    const errorMessage = resultOutput.textContent;
-                                    return errorMessage;
-                                }
-                                if (numbers[1].value.trim() === '') {
-                                    numbers[3].textContent = '';
-                                    resultOutput.textContent = 'Please enter the second numbers';
-                                    const errorMessage = resultOutput.textContent;
-                                    return errorMessage;
-                                }
-                                result = calculate(
-                                    +num1,
-                                    signs[0].value,
-                                    +numbers[1].value,
-                                );
-                                // drawPokemons(result, '.calculator .output__result');
-                                resultOutput.textContent = result;
-                            } else if (i === 1) {
-                                state[prop] = item.value;
-                                const num2 = +inputNumber.value;
-                                numbers[3].textContent = num2;
-                                // drawPokemons(num2, '.calculator .output__second');
-                                if (numbers[0].value.trim() === '') {
-                                    numbers[2].textContent = '';
-                                    resultOutput.textContent = 'Please enter the first numbers';
-                                    const errorMessage = resultOutput.textContent;
-                                    return errorMessage;
-                                }
-                                if (numbers[1].value.trim() === '') {
-                                    numbers[3].textContent = '';
-                                    resultOutput.textContent = 'Please enter the second numbers';
-                                    const errorMessage = resultOutput.textContent;
-                                    return errorMessage;
-                                }
-                                result = calculate(
-                                    +numbers[0].value,
-                                    signs[0].value,
-                                    +num2,
-                                );
-                                resultOutput.textContent = result;
-                                // drawPokemons(result, '.calculator .output__result');
-                            }
+                        if (item.classList.contains('number__first--input')) {
+                            state[prop] = items;
+                            // drawPokemons(num1, '.calculator .output__first');
+                            calculate(state.firstNumber, state.sign, state.secondNumber);
+                            // drawPokemons(result, '.calculator .output__result');
+                        } else if (item.classList.contains('number__second--input')) {
+                            state[prop] = items;
+                            // drawPokemons(num2, '.calculator .output__second');
+                            calculate(state.firstNumber, state.sign, state.secondNumber);
+                            // drawPokemons(result, '.calculator .output__result');
                         }
                         break;
                     case 'SELECT':
-                        if (inputSign) {
-                            if (i === 0) {
-                                state[prop] = item.value;
-                                const sign = inputSign.value;
-                                signs[1].textContent = sign;
-                                // signs[2].textContent = sign;
-                                if (numbers[0].value.trim() === '') {
-                                    numbers[2].textContent = '';
-                                    resultOutput.textContent = 'Please enter the first numbers';
-                                    const errorMessage = resultOutput.textContent;
-                                    return errorMessage;
-                                }
-                                if (numbers[1].value.trim() === '') {
-                                    numbers[3].textContent = '';
-                                    resultOutput.textContent = 'Please enter the second numbers';
-                                    const errorMessage = resultOutput.textContent;
-                                    return errorMessage;
-                                }
-                                result = calculate(
-                                    +numbers[0].value,
-                                    sign,
-                                    +numbers[1].value,
-                                );
-                                resultOutput.textContent = result;
-                                // drawPokemons(result, '.calculator .output__result');
-                            }
+                        if (item.classList.contains('math__sign--select')) {
+                            state[prop] = items;
+                            calculate(state.firstNumber, state.sign, state.secondNumber);
+                            // drawPokemons(result, '.calculator .output__result');
                         }
                         break;
                     case 'BUTTON':
-                        if (buttonOutput) {
-                            if (i === 0) {
-                                if (numbers[0].value.trim() === '') {
-                                    resultInput.textContent = 'Please enter the first numbers';
-                                    const errorMessage = resultInput.textContent;
-                                    return errorMessage;
-                                }
-                                if (numbers[1].value.trim() === '') {
-                                    resultInput.textContent = 'Please enter the first numbers';
-                                    const errorMessage = resultInput.textContent;
-                                    return errorMessage;
-                                }
-                                state[prop] = item.textContent;
-                                result = calculate(
-                                    +numbers[0].value,
-                                    signs[0].value,
-                                    +numbers[1].value,
-                                );
-                                resultInput.textContent = result;
-                            }
+                        if (item.classList.contains('equel--button')) {
+                            state[prop] = result;
+                            calculate(state.firstNumber, state.sign, state.secondNumber);
+                            resultInput.textContent = result;
                         }
                         break;
                     default:
@@ -227,8 +183,9 @@ const changeState = (state) => {
             });
         });
     };
-    calculator('input', numbers, 'number');
-    calculator('change', signs, 'sign');
-    calculator('click', buttons, 'button');
+    calculator('input', firstInputNumber, 'firstNumber');
+    calculator('input', secondInputNumber, 'secondNumber');
+    calculator('change', signSelect, 'sign');
+    calculator('click', equelButton, 'result');
 };
 changeState(stateInputs);

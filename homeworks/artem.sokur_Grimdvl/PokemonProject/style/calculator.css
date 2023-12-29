@@ -58,11 +58,17 @@
 
 .calculator__inputs-result div {
   height: 34px;
+  min-width: 300px;
   line-height: 20px;
   font-size: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
+}
+
+.calculator__inputs-result span {
+  display: flex;
+  justify-content: start;
 }
 
 .calculator__outputs {
