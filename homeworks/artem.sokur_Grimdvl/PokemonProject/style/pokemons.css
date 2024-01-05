@@ -62,12 +62,10 @@
 }
 
 .filters__form-select.active::before {
-  left: 86px;
   transform: rotate(-85deg);
 }
 
 .filters__form-select.active::after {
-  left: 95px;
   transform: rotate(85deg);
 }
 
