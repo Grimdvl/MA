@@ -524,12 +524,26 @@ footer {
     width: 170px;
   }
 
-  .calculator__inputs div:nth-child(4) {
-    display: none;
+  .calculator__inputs {
+    display: flex;
+    flex-wrap: wrap;
   }
 
-  .calculator__inputs div:nth-child(5) {
-    display: none;
+  .calculator__inputs .calculator__inputs--button,
+  .calculator__inputs .calculator__inputs-result {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .calculator__inputs-result div {
+    justify-content: center;
+  }
+
+  .calculator__inputs-history {
+    font-size: 14px;
   }
 }
 
