@@ -51,22 +51,11 @@ const renderHistory = () => {
     });
 };
 
-const addTimeAndDate = () => {
-    const currentDate = new Date();
-    const dateOptions = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-    };
-    const formattedDate = currentDate.toLocaleDateString(undefined, dateOptions);
-    return formattedDate;
-};
+const addTimeAndDate = () => new Date().toISOString();
 
 const updateHistory = () => {
     const formattedDate = new Date(stateInputs.dateOperation);
+
     const dateOptions = {
         year: 'numeric',
         month: 'short',
@@ -74,6 +63,7 @@ const updateHistory = () => {
         hour: '2-digit',
         minute: '2-digit',
     };
+
     const formattedDateTime = formattedDate.toLocaleDateString(undefined, dateOptions);
 
     const operationHistory = `
