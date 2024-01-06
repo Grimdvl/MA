@@ -9,8 +9,12 @@ const equelButton = document.querySelectorAll('.equel--button');
 const resultInput = document.querySelector('.result--input');
 const resultOutput = document.querySelector('.output-result');
 const equel = document.querySelectorAll('.output-equal');
+const historyDiv = document.querySelector('.calculator__inputs-history');
 
 const stateInputs = {};
+const MAX_HISTORY_ITEMS = 3;
+
+let result;
 
 // transform value to numbers
 const checkNumInputs = (selector) => {
@@ -21,47 +25,69 @@ const checkNumInputs = (selector) => {
     });
 };
 
-// class PokemonsCards {
-//     constructor(src, alt, parentSelector, ...classes) {
-//         this.src = src;
-//         this.alt = alt;
-//         this.classes = classes;
-//         this.parent = document.querySelector(parentSelector);
-//     }
+const saveToLocalStorage = (operation) => {
+    const history = JSON.parse(localStorage.getItem('calculatorHistory')) || [];
 
-//     render() {
-//         const element = document.createElement('div');
-//         if (this.classes.length === 0) {
-//             this.classes = 'output-card';
-//             element.classList.add(this.classes);
-//         } else {
-//             this.classes.forEach((className) => element.classList.add(className));
-//         }
-//         element.innerHTML = `<img src=${this.src} alt=${this.alt}>`;
-//         this.parent.append(element);
-//     }
-// }
+    if (history.length >= MAX_HISTORY_ITEMS) {
+        history.pop();
+    }
 
-// const drawPokemons = (inputValue, containerSelector) => {
-//     const cardContainer = document.querySelector(containerSelector);
-//     cardContainer.innerHTML = '';
-//     const numberOfPokemons = parseInt(inputValue, 10);
-//     const isNegative = numberOfPokemons < 0;
-//     for (let i = 0; i < Math.abs(numberOfPokemons); i++) {
-//         new PokemonsCards(
-//             'img/pokemon.png',
-//             'pokemon',
-//             containerSelector,
-//         ).render();
-//     }
-//     if (inputValue > 100) {
-//         resultOutputCards.textContent = 'To many pokemons';
-//     }
-//     return isNegative ? -numberOfPokemons : numberOfPokemons;
-// };
+    history.unshift(operation);
+    localStorage.setItem('calculatorHistory', JSON.stringify(history));
+};
 
-let result;
+const getHistoryFromLocalStorage = () => {
+    const history = JSON.parse(localStorage.getItem('calculatorHistory')) || [];
+    return history.slice(0, MAX_HISTORY_ITEMS);
+};
+
+const renderHistory = () => {
+    historyDiv.innerHTML = '';
+    const history = getHistoryFromLocalStorage();
+    history.forEach((operation) => {
+        const historyItem = document.createElement('p');
+        historyItem.textContent = operation;
+        historyDiv.appendChild(historyItem);
+    });
+};
+
+const addTimeAndDate = () => {
+    const currentDate = new Date();
+    const dateOptions = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+    };
+    const formattedDate = currentDate.toLocaleDateString(undefined, dateOptions);
+    return formattedDate;
+};
+
+const updateHistory = () => {
+    const formattedDate = new Date(stateInputs.dateOperation);
+    const dateOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+    const formattedDateTime = formattedDate.toLocaleDateString(undefined, dateOptions);
+
+    const operationHistory = `
+        Math. operation: ${stateInputs.firstNumber} ${stateInputs.sign} ${stateInputs.secondNumber} = ${stateInputs.result}. 
+        Date of calculation: ${formattedDateTime}. 
+        Time of function execution: ${stateInputs.timeOperation} ms.`;
+
+    saveToLocalStorage(operationHistory);
+    renderHistory();
+};
+
 const calculate = (firstNum, operator, secondNum) => {
+    const startTime = performance.now();
+
     if (!firstNum || !secondNum) {
         outputs.forEach((item) => {
             item.textContent = '';
@@ -116,7 +142,17 @@ const calculate = (firstNum, operator, secondNum) => {
         } else {
             result = `${result} pokemons`;
         }
+        const endTime = performance.now();
+        let timeDiff = endTime - startTime;
+        timeDiff = (timeDiff / 10).toFixed(3);
+
+        const timeOperation = timeDiff;
+        const dateOperation = addTimeAndDate();
+
+        stateInputs.timeOperation = timeOperation;
+        stateInputs.dateOperation = dateOperation;
     }
+    stateInputs.result = result;
     resultOutput.textContent = result;
     return result;
 };
@@ -134,26 +170,22 @@ const changeState = (state) => {
                     case 'INPUT':
                         if (item.classList.contains('number__first--input')) {
                             state[prop] = items;
-                            // drawPokemons(num1, '.calculator .output__first');
                             calculate(state.firstNumber, state.sign, state.secondNumber);
-                            // drawPokemons(result, '.calculator .output__result');
                         } else if (item.classList.contains('number__second--input')) {
                             state[prop] = items;
-                            // drawPokemons(num2, '.calculator .output__second');
                             calculate(state.firstNumber, state.sign, state.secondNumber);
-                            // drawPokemons(result, '.calculator .output__result');
                         }
                         break;
                     case 'SELECT':
                         if (item.classList.contains('math__sign--select')) {
                             state[prop] = items;
                             calculate(state.firstNumber, state.sign, state.secondNumber);
-                            // drawPokemons(result, '.calculator .output__result');
                         }
                         break;
                     case 'BUTTON':
                         if (item.classList.contains('equel--button')) {
                             state[prop] = result;
+                            updateHistory();
                             calculate(state.firstNumber, state.sign, state.secondNumber);
                             resultInput.textContent = result;
                         }
@@ -172,3 +204,7 @@ const changeState = (state) => {
     calculator('click', equelButton, 'result');
 };
 changeState(stateInputs);
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderHistory();
+});

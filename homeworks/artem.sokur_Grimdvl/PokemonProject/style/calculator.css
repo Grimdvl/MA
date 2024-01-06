@@ -58,7 +58,7 @@
 
 .calculator__inputs-result div {
   height: 34px;
-  min-width: 300px;
+  width: 200px;
   line-height: 20px;
   font-size: 20px;
   display: flex;
@@ -105,4 +105,13 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
+}
+
+.calculator__inputs-history {
+  font-size: 16px;
+  margin: 0 auto;
+}
+
+.calculator__inputs-history p {
+  margin: 10px auto;
 }
